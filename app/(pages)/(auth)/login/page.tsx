@@ -1,8 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { GithubIcon } from "lucide-react";
-import { signIn } from "next-auth/react";
+import { UserAuthForm } from "@/components/auth/user-auth.form";
 
 export default function Login() {
   return (
@@ -31,12 +29,12 @@ export default function Login() {
                 Se connecter
               </h1>
             </div>
-            <Button
+            {/*  <Button
               onClick={() => signIn("github", { callbackUrl: "/dashboard" })}
             >
               <GithubIcon className="mr-2 h-4 w-4" /> Github
-            </Button>
-            {/* <UserAuthForm /> */}
+            </Button> */}
+            <UserAuthForm />
           </div>
         </div>
       </div>
