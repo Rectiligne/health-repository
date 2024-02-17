@@ -3,7 +3,9 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
-import SessionWrapper from "@/components/auth/sessionWrapper";
+import SessionWrapper from "@/components/providers/session.provider";
+import { ThemeProvider } from "@/components/providers/theme.provider";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,8 +21,23 @@ export default function RootLayout({
 }>) {
   return (
     <SessionWrapper>
-      <html lang="en">
-        <body className={cn(inter.className, "h-screen")}>{children}</body>
+      <html lang="en" suppressHydrationWarning>
+        <body
+          className={cn(
+            inter.className,
+            "h-screen text-muted-foreground w-screen overflow-hidden"
+          )}
+        >
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+            <Toaster />
+          </ThemeProvider>
+        </body>
       </html>
     </SessionWrapper>
   );
