@@ -28,7 +28,7 @@
     ".next/types/**/*.ts",
     "app/not-found",
     "app/not-found",
-    "middleware.js"
+    "middleware.ts"
   ],
   "exclude": ["node_modules"]
 }
