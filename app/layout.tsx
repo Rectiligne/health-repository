@@ -4,7 +4,6 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 
 import SessionWrapper from "@/components/auth/sessionWrapper";
-import { Session } from "next-auth";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,10 +14,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-  session,
 }: Readonly<{
   children: React.ReactNode;
-  session: Session;
 }>) {
   return (
     <SessionWrapper>
