@@ -3,13 +3,14 @@
 import { Button } from "@/components/ui/button";
 import { GithubIcon } from "lucide-react";
 import { signIn, useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
   const { data: session } = useSession();
+  const router = useRouter();
 
   if (session) {
-    redirect("/dashboard");
+    router.push("/dashboard");
   } else {
     return (
       <>
