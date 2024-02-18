@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 
-import { SidebarNav } from "@/components/settings/settings-tabs";
 import { Separator } from "@/components/ui/separator";
+import { SidebarNav } from "@/components/ui/settings/settings-tabs";
 
 export const metadata: Metadata = {
   title: "Forms",
@@ -10,8 +10,12 @@ export const metadata: Metadata = {
 
 const sidebarNavItems = [
   {
+    title: "Account",
+    href: "/settings/account",
+  },
+  {
     title: "Preferences",
-    href: "/settings",
+    href: "/settings/preferences",
   },
   {
     title: "Token",

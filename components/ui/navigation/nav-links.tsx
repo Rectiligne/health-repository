@@ -1,7 +1,7 @@
 "use client";
 
 import { routes } from "@/app/routing";
-import { Route } from "@/lib/models/routes.type";
+import { Route } from "@/types/routes.type";
 import clsx from "clsx";
 
 import Link from "next/link";

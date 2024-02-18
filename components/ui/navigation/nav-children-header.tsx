@@ -10,10 +10,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
+import { UserIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
-import LogOutButton from "../../auth/logout.button";
-import { CommandSearch } from "../../ui/command-search";
-import { ToggleTheme } from "../../ui/toggleTheme";
+import LogOutButton from "../auth/logout.button";
+import { CommandSearch } from "../command-search";
+import { ToggleTheme } from "../toggleTheme";
 
 export default function NavigationChildrenHeader() {
   const { data: session } = useSession();
@@ -33,7 +34,12 @@ export default function NavigationChildrenHeader() {
               <AvatarImage className="w-10 h-10" src={session!.user!.image} />
             )}
             <AvatarFallback className="bg-primary-foreground w-10 h-10 flex items-center justify-center rounded-full border">
-              LQ
+              {session?.user?.firstName || session?.user?.lastName ? (
+                (session?.user?.firstName ?? "").charAt(0).toUpperCase() +
+                (session?.user?.lastName ?? "").charAt(0).toUpperCase()
+              ) : (
+                <UserIcon />
+              )}
             </AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>

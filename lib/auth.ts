@@ -2,6 +2,7 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { compare } from "bcrypt";
 import { NextAuthOptions, User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GitHubProvider from "next-auth/providers/github";
 import prisma from "./prisma";
 
 export const authOptions: NextAuthOptions = {
@@ -14,6 +15,10 @@ export const authOptions: NextAuthOptions = {
     signIn: "/login",
   },
   providers: [
+    GitHubProvider({
+      clientId: process.env.GITHUB_ID!,
+      clientSecret: process.env.GITHUB_SECRET!,
+    }),
     CredentialsProvider({
       // The name to display on the sign in form (e.g. "Sign in with...")
       name: "Credentials",
@@ -49,9 +54,10 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
+        const { password, ...rest } = user;
+
         return {
-          id: Number(user.id!),
-          email: user.email!,
+          ...rest,
         };
       },
     }),
@@ -64,12 +70,24 @@ export const authOptions: NextAuthOptions = {
       return baseUrl;
     },  */
     async session({ session, token }) {
+      let user = null;
+
+      if (token) {
+        const data = await prisma.user.findUnique({
+          where: {
+            email: token.email!,
+          },
+        });
+        const { password, ...userData } = data!;
+
+        user = {
+          ...userData,
+        };
+      }
+
       return {
         ...session,
-        user: {
-          ...session.user,
-          email: token.email,
-        },
+        user: { ...user },
       };
     },
     async jwt({ token, user }) {

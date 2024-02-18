@@ -23,3 +23,9 @@ export const UserSchemaLogIn = z.object({
     .min(1, "Mot de passe necessaire")
     .min(8, "Mot de passe doit contenir au moins 8 caractères"),
 });
+
+export const UserSchemaUpdate = z.object({
+  email: z.string().min(1, "Email necessaire").email("Email non valide"),
+  firstName: z.string().optional().nullish(),
+  lastName: z.string().optional().nullish(),
+});

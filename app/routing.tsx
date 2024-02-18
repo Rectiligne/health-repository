@@ -1,4 +1,4 @@
-import { Routes } from "@/lib/models/routes.type";
+import { Routes } from "@/types/routes.type";
 import {
   ActivityIcon,
   FlaskConicalIcon,

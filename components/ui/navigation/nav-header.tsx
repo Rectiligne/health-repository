@@ -4,15 +4,15 @@ import { cn } from "@/lib/utils";
 
 import { Check, ChevronsUpDown } from "lucide-react";
 import React, { useEffect } from "react";
-import { Button } from "../../ui/button";
+import { Button } from "../button";
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
-} from "../../ui/command";
-import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover";
+} from "../command";
+import { Popover, PopoverContent, PopoverTrigger } from "../popover";
 
 export default function NavigationHeader() {
   const [open, setOpen] = React.useState(false);

@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import { UserSchemaLogIn } from "@/app/api/user/user.schema";
+import { UserSchemaLogIn } from "@/components/schema/auth/user.schema";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -10,7 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { GithubIcon, Loader2Icon } from "lucide-react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import * as z from "zod";
 import {
   Form,
@@ -19,8 +19,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
-import { useToast } from "../ui/use-toast";
+} from "../../ui/form";
+import { useToast } from "../../ui/use-toast";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -38,19 +38,29 @@ export function UserAuthForm({ className }: UserAuthFormProps) {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof FormShema>) => {
+  const onSubmit = async (
+    values: z.infer<typeof FormShema>,
+    type: string = "credentials"
+  ) => {
     setIsLoading(true);
-    const singInData = await signIn("credentials", {
-      email: values.email,
-      password: values.password,
-      redirect: false,
-    });
-    setIsLoading(false);
-    console.log(singInData);
+    let singInData = null;
+    if (type === "github") {
+      singInData = await signIn("github", {
+        callbackUrl: "/dashboard",
+      });
+    } else {
+      singInData = await signIn("credentials", {
+        email: values.email,
+        password: values.password,
+        redirect: false,
+      });
+    }
     if (!singInData?.ok) {
+      setIsLoading(false);
       toast({
         title: "Erreur de connexion",
-        description: "Email ou mot de passe incorrecte",
+        description:
+          "Un problème est survenu lors de la connexion. Veuillez réessayer.",
         variant: "destructive",
       });
     } else {
@@ -61,7 +71,9 @@ export function UserAuthForm({ className }: UserAuthFormProps) {
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit(
+          onSubmit as SubmitHandler<{ email: string; password: string }>
+        )}
         className={cn("grid gap-6", className)}
       >
         <div className="grid gap-2">
@@ -122,7 +134,12 @@ export function UserAuthForm({ className }: UserAuthFormProps) {
           </span>
         </div>
       </div>
-      <Button variant="outline" type="button" disabled={isLoading}>
+      <Button
+        variant="outline"
+        onClick={() => onSubmit(form.getValues(), "github")}
+        type="button"
+        disabled={isLoading}
+      >
         {isLoading ? (
           <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
         ) : (

@@ -6,3 +6,7 @@ export default withAuth({
     error: "/error",
   },
 });
+
+export const config = {
+  matcher: ["/((?!api|static|favicon.ico).*)"],
+};

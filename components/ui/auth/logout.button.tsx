@@ -3,7 +3,7 @@
 import clsx from "clsx";
 import { LogOutIcon } from "lucide-react";
 import { signOut } from "next-auth/react";
-import { Button } from "../ui/button";
+import { Button } from "../button";
 
 export default function LogOutButton({
   className,

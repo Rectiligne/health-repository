@@ -1,6 +1,6 @@
 "use client";
 
-import { Route } from "@/lib/models/routes.type";
+import { Route } from "@/types/routes.type";
 import { FileIcon, Search } from "lucide-react";
 import Link from "next/link";
 import React from "react";

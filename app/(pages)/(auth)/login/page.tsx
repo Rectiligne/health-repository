@@ -1,6 +1,6 @@
 "use client";
 
-import { UserAuthForm } from "@/components/auth/user-auth.form";
+import { UserAuthForm } from "@/components/form/auth/user-auth.form";
 
 export default function Login() {
   return (

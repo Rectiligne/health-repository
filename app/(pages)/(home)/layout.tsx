@@ -1,5 +1,5 @@
-import NavigationChildrenHeader from "@/components/Layout/navigation/nav-children-header";
-import NavigationWrapper from "@/components/Layout/navigation/nav-wrapper";
+import NavigationChildrenHeader from "@/components/ui/navigation/nav-children-header";
+import NavigationWrapper from "@/components/ui/navigation/nav-wrapper";
 
 export default function layout({
   children,
