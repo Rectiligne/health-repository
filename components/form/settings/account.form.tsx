@@ -19,6 +19,7 @@ import { toast } from "@/components/ui/use-toast";
 import { Loader2Icon, SparklesIcon } from "lucide-react";
 import { AuthUser } from "next-auth";
 import React from "react";
+import { onSubmitForm } from "./utils.form";
 
 type AccountFormValues = z.infer<typeof accountFormSchema>;
 
@@ -38,42 +39,7 @@ export function AccountForm({ user }: AccountFormProps) {
   });
 
   async function onSubmit(data: AccountFormValues) {
-    setIsLoading(true);
-
-    const res = await fetch("/api/user", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ ...data, email: user?.email }),
-    });
-
-    let toastContent = {};
-    if (!res.ok) {
-      const result = await res.json();
-      toastContent = {
-        title: "Erreur de connexion",
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-destructive-foreground  p-4">
-            <code className="text-destructive">
-              {JSON.stringify(result, null, 2)}
-            </code>
-          </pre>
-        ),
-        variant: "destructive",
-      };
-    } else {
-      toastContent = {
-        description: (
-          <p className="flex items-center">
-            Compte mis à jour
-            <SparklesIcon className="ml-2 w-4 h-4" />
-          </p>
-        ),
-      };
-    }
-    toast(toastContent);
-    setIsLoading(false);
+    onSubmitForm(data, setIsLoading, user);
   }
 
   return (

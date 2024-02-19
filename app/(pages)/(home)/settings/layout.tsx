@@ -18,8 +18,8 @@ const sidebarNavItems = [
     href: "/settings/preferences",
   },
   {
-    title: "Token",
-    href: "/settings/token",
+    title: "Providers",
+    href: "/settings/providers",
   },
 ];
 

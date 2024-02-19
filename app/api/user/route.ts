@@ -44,12 +44,10 @@ export async function PUT(request: Request) {
     const body = await request.json();
     const { email, ...left } = UserSchemaUpdate.parse(body);
 
-    console.log(email, left);
-
     const existingUserbyEmail = await prisma.user.findUnique({
       where: { email },
     });
-    console.log(existingUserbyEmail);
+
     if (!existingUserbyEmail) {
       return NextResponse.json(
         { user: null, error: "User does not exist" },
@@ -57,7 +55,6 @@ export async function PUT(request: Request) {
       );
     }
 
-    console.log(left);
     const user = await prisma.user.update({
       where: { email },
       data: {
