@@ -85,17 +85,19 @@ export function ProvidersForm({ user }: AccountFormProps) {
                   Generer un access_token
                 </Link>
               </Button>
-              <Button variant={"link"} asChild>
-                <Link
-                  target="_blank"
-                  href={
-                    "https://github.com/apps/health-repository/installations/new/permissions?target_id=" +
-                    githubProvider.providerAccountId
-                  }
-                >
-                  Autoriser l&apos;application
-                </Link>
-              </Button>
+              {githubProvider && (
+                <Button variant={"link"} asChild>
+                  <Link
+                    target="_blank"
+                    href={
+                      "https://github.com/apps/health-repository/installations/new/permissions?target_id=" +
+                      githubProvider.providerAccountId
+                    }
+                  >
+                    Autoriser l&apos;application
+                  </Link>
+                </Button>
+              )}
             </section>
           </section>
           <Separator className="my-6" />
