@@ -1,6 +1,7 @@
 import { ProvidersForm } from "@/components/form/settings/providers.form";
 import { Separator } from "@/components/ui/separator";
 import { authOptions } from "@/lib/auth";
+import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 
 export default async function Token() {
