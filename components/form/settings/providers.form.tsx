@@ -1,9 +1,8 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { providerFormSchema } from "@/components/schema/provider.schema";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -14,53 +13,126 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { AuthUser } from "next-auth";
+import { Separator } from "@/components/ui/separator";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Account } from "@prisma/client";
+import { GithubIcon, GitlabIcon, Loader2Icon } from "lucide-react";
+import Link from "next/link";
 import React from "react";
-import { onSubmitForm } from "./utils.form";
-
-const providerFormSchema = z.object({
-  gitlabToken: z.string().min(2, {
-    message: "token must be at least 2 characters.",
-  }),
-});
-
-type providerFormValues = z.infer<typeof providerFormSchema>;
+import { useForm } from "react-hook-form";
+import { submitProvidersForm } from "./utils.form";
 
 interface AccountFormProps {
-  user: AuthUser | undefined;
+  user: any;
 }
 
 export function ProvidersForm({ user }: AccountFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
-  const form = useForm<providerFormValues>({
+  const githubProvider = user.accounts.find(
+    (account: Account) => account.provider === "github"
+  );
+  const gitlabId = process.env.NEXT_PUBLIC_GITHUB_ID;
+
+  const form = useForm<AccountFormValues>({
     resolver: zodResolver(providerFormSchema),
     defaultValues: {
-      gitlabToken: user?.gitlabToken,
+      github_endpoint: "",
+      gitlab_endpoint: "",
     },
   });
+  type AccountFormValues = z.infer<typeof providerFormSchema>;
 
-  function onSubmit(data: providerFormValues) {
-    onSubmitForm(data, setIsLoading, user);
+  async function onSubmit(data: AccountFormValues) {
+    await submitProvidersForm(data, user, setIsLoading);
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
-          control={form.control}
-          name="gitlabToken"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Gitlab token</FormLabel>
-              <FormControl>
-                <Input placeholder="Your token" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit">Update account</Button>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <section>
+          <header className="space-y-1">
+            <h3 className="text-xl font-medium tracking-tight flex gap-2 items-center">
+              <GithubIcon className="w-5 h-5" /> Github
+            </h3>
+          </header>
+          <section className="flex flex-col gap-4 w-full">
+            <FormField
+              control={form.control}
+              name="github_endpoint"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>URL</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={isLoading}
+                      placeholder="github.com/{utilisateur}"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <section className="flex gap-4">
+              <Button variant={"outline"} asChild>
+                <Link
+                  href={
+                    "https://github.com/login/oauth/authorize?client_id=" +
+                    gitlabId
+                  }
+                >
+                  Generer un access_token
+                </Link>
+              </Button>
+              <Button variant={"link"} asChild>
+                <Link
+                  target="_blank"
+                  href={
+                    "https://github.com/apps/health-repository/installations/new/permissions?target_id=" +
+                    githubProvider.providerAccountId
+                  }
+                >
+                  Autoriser l&apos;application
+                </Link>
+              </Button>
+            </section>
+          </section>
+          <Separator className="my-6" />
+        </section>
+
+        <section>
+          <header className="space-y-1">
+            <h3 className="text-xl font-medium tracking-tight flex gap-2 items-center">
+              <GitlabIcon className="w-5 h-5" /> Gitlab
+            </h3>
+          </header>
+          <section className="flex flex-col gap-4 w-full">
+            <FormField
+              control={form.control}
+              name="gitlab_endpoint"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>URL</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={isLoading}
+                      placeholder="gitlab.com/{utilisateur}"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </section>
+          <Separator className="my-6" />
+        </section>
+
+        <Button type="submit">
+          {isLoading && <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />}
+          Mettre à jour
+        </Button>
       </form>
     </Form>
   );

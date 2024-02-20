@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 import {
   UserSchemaLogIn,
   UserSchemaUpdate,
-} from "../../../components/schema/auth/user.schema";
+} from "../../../components/schema/user.schema";
 
 export async function POST(request: Request) {
   try {

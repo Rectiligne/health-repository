@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import { UserSchemaLogIn } from "@/components/schema/auth/user.schema";
+import { UserSchemaLogIn } from "@/components/schema/user.schema";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
