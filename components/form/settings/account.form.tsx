@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { accountFormSchema } from "@/components/schema/settings/account.schema";
+import { userAccountFormSchema } from "@/components/schema/account.schema";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -15,13 +15,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/components/ui/use-toast";
-import { Loader2Icon, SparklesIcon } from "lucide-react";
+import { Loader2Icon } from "lucide-react";
 import { AuthUser } from "next-auth";
 import React from "react";
-import { onSubmitForm } from "./utils.form";
+import { submitUserForm } from "./utils.form";
 
-type AccountFormValues = z.infer<typeof accountFormSchema>;
+type AccountFormValues = z.infer<typeof userAccountFormSchema>;
 
 interface AccountFormProps {
   user: AuthUser | undefined;
@@ -31,7 +30,7 @@ export function AccountForm({ user }: AccountFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   const form = useForm<AccountFormValues>({
-    resolver: zodResolver(accountFormSchema),
+    resolver: zodResolver(userAccountFormSchema),
     defaultValues: {
       firstName: user?.firstName || "",
       lastName: user?.lastName || "",
@@ -39,7 +38,7 @@ export function AccountForm({ user }: AccountFormProps) {
   });
 
   async function onSubmit(data: AccountFormValues) {
-    onSubmitForm(data, setIsLoading, user);
+    await submitUserForm(data, setIsLoading, user);
   }
 
   return (
@@ -81,22 +80,9 @@ export function AccountForm({ user }: AccountFormProps) {
             )}
           />
         </section>
-        {/* <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input placeholder="Your email" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        /> */}
         <Button type="submit">
           {isLoading && <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />}
-          Update account
+          Mettre à jour
         </Button>
       </form>
     </Form>

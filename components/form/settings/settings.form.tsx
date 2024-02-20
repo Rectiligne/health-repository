@@ -134,7 +134,7 @@ export function SettingsForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">Update account</Button>
+        <Button type="submit">Mettre à jour</Button>
       </form>
     </Form>
   );
