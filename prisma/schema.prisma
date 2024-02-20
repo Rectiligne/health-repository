@@ -14,7 +14,7 @@ datasource db {
 model Account {
   id                 String  @id @default(cuid())
   userId             String  @map("user_id")
-  provider           String  @unique
+  provider           String
   type               String? @map("type")
   providerAccountId  String? @map("provider_account_id")
   refresh_token      String?
