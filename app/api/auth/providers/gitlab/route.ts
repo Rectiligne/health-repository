@@ -12,8 +12,8 @@ export async function GET(request: Request) {
 
     const gitlabEndPoint =
       (
-        user?.accounts.find(
-          (acc: any) =>
+        (user!.accounts as Partial<Account>[]).find(
+          (acc: Partial<Account>) =>
             acc.provider === "gitlab" && acc.userId === session!.user.id
         ) as Account
       )?.endpoint ?? "gitlab.com";
@@ -62,7 +62,7 @@ export async function GET(request: Request) {
         provider: "gitlab",
         providerAccountId: `${user_data.id}`,
         refresh_token,
-        expires_at: new Date(created_at * 1000 + expires_in * 1000),
+        expires_at: new Date(created_at! * 1000 + expires_in! * 1000),
       },
     });
 
