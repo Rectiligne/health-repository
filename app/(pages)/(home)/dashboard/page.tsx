@@ -6,8 +6,10 @@ export default async function Dashboard() {
   const session = await getServerSession(authOptions);
   const githubProvider = await prisma.account.findUnique({
     where: {
-      provider: "github",
-      userId: session!.user.id,
+      user_provider_unique: {
+        provider: "github",
+        userId: session!.user.id,
+      },
     },
   });
 
