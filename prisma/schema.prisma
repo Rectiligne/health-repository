@@ -29,7 +29,7 @@ model Account {
   oauth_token        String?
   user               User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([userId, provider])
+  @@unique([userId, provider], name: "user_provider_unique")
 }
 
 model Session {

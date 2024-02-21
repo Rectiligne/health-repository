@@ -43,8 +43,10 @@ export async function GET(request: Request) {
     // Save the access token and the user in the database
     const account = await prisma.account.upsert({
       where: {
-        provider: "github",
-        userId: session!.user.id,
+        user_provider_unique: {
+          provider: "github",
+          userId: session!.user.id,
+        },
       },
       update: {
         access_token: data.access_token,
