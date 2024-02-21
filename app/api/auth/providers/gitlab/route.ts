@@ -4,6 +4,7 @@ import { getUser } from "@/lib/user.utils";
 import { Account } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
+import prisma from "@/lib/prisma";
 
 export async function GET(request: Request) {
   try {

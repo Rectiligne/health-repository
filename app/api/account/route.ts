@@ -1,3 +1,4 @@
+import prisma from "@/lib/prisma";
 import { groupByPrefix } from "@/lib/utils";
 import { NextResponse } from "next/server";
 
