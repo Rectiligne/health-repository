@@ -1,4 +1,5 @@
 import { authOptions } from "@/lib/auth";
+import { getAccessToken } from "@/lib/providers.utils";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
@@ -16,32 +17,22 @@ export async function GET(request: Request) {
     const queryParams =
       `?client_id=${gitlabId}&client_secret=${gitlabSecret}&code=` + code;
 
-    const res = await fetch(
-      "https://github.com/login/oauth/access_token" + queryParams,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      }
+    const { access_token, refresh_token, ...left } = await getAccessToken(
+      "https://github.com/login/oauth/access_token" + queryParams
     );
-
-    const data = await res.json();
 
     // Get github userID
     const res1 = await fetch("https://api.github.com/user", {
       method: "GET",
       headers: {
         Accept: "application/vnd.github.v3+json",
-        Authorization: `Bearer ${data.access_token}`,
+        Authorization: `Bearer ${access_token}`,
       },
     });
 
     const user_data = await res1.json();
-
     // Save the access token and the user in the database
-    const account = await prisma.account.upsert({
+    await prisma.account.upsert({
       where: {
         user_provider_unique: {
           provider: "github",
@@ -49,15 +40,18 @@ export async function GET(request: Request) {
         },
       },
       update: {
-        access_token: data.access_token,
+        access_token,
+        refresh_token,
+        expires_at: null,
       },
       create: {
         userId: session!.user.id,
         type: "github",
-        access_token: data.access_token,
+        access_token,
         provider: "github",
         providerAccountId: `${user_data.id}`,
-        endpoint: "https://api.github.com",
+        refresh_token,
+        expires_at: null,
       },
     });
 

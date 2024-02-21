@@ -63,7 +63,7 @@ export async function submitProvidersForm(
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ ...data, email: user?.email }),
+    body: JSON.stringify({ ...data, user_id: user?.id }),
   });
 
   let toastContent = {};
@@ -85,7 +85,7 @@ export async function submitProvidersForm(
     toastContent = {
       description: (
         <p className="flex items-center">
-          Compte mis à jour
+          Providers mis à jour
           <SparklesIcon className="ml-2 w-4 h-4" />
         </p>
       ),
