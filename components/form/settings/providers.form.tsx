@@ -39,7 +39,7 @@ export function ProvidersForm({ user }: AccountFormProps) {
     (account: Account) => account.provider === "gitlab"
   );
 
-  const github_endpoint = gitlabProvider?.endpoint || "github.com";
+  const github_endpoint = githubProvider?.endpoint || "github.com";
   const gitlab_endpoint = gitlabProvider?.endpoint || "gitlab.com";
 
   const form = useForm<AccountFormValues>({
