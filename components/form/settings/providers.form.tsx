@@ -28,17 +28,25 @@ interface AccountFormProps {
 
 export function ProvidersForm({ user }: AccountFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const githubId = process.env.NEXT_PUBLIC_GITHUB_ID;
+  const gitlabId = process.env.NEXT_PUBLIC_GITLAB_ID;
 
   const githubProvider = user.accounts.find(
     (account: Account) => account.provider === "github"
   );
-  const gitlabId = process.env.NEXT_PUBLIC_GITHUB_ID;
+
+  const gitlabProvider = user.accounts.find(
+    (account: Account) => account.provider === "gitlab"
+  );
+
+  const github_endpoint = githubProvider?.endpoint || "github.com";
+  const gitlab_endpoint = gitlabProvider?.endpoint || "gitlab.com";
 
   const form = useForm<AccountFormValues>({
     resolver: zodResolver(providerFormSchema),
     defaultValues: {
-      github_endpoint: "",
-      gitlab_endpoint: "",
+      github_endpoint,
+      gitlab_endpoint,
     },
   });
   type AccountFormValues = z.infer<typeof providerFormSchema>;
@@ -62,11 +70,11 @@ export function ProvidersForm({ user }: AccountFormProps) {
               name="github_endpoint"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>URL</FormLabel>
+                  <FormLabel>Nom de domaine</FormLabel>
                   <FormControl>
                     <Input
                       disabled={isLoading}
-                      placeholder="github.com/{utilisateur}"
+                      placeholder="github.com"
                       {...field}
                     />
                   </FormControl>
@@ -77,10 +85,7 @@ export function ProvidersForm({ user }: AccountFormProps) {
             <section className="flex gap-4">
               <Button variant={"outline"} asChild>
                 <Link
-                  href={
-                    "https://github.com/login/oauth/authorize?client_id=" +
-                    gitlabId
-                  }
+                  href={`https://${github_endpoint}/login/oauth/authorize?client_id=${githubId}`}
                 >
                   Generer un access_token
                 </Link>
@@ -89,10 +94,7 @@ export function ProvidersForm({ user }: AccountFormProps) {
                 <Button variant={"link"} asChild>
                   <Link
                     target="_blank"
-                    href={
-                      "https://github.com/apps/health-repository/installations/new/permissions?target_id=" +
-                      githubProvider.providerAccountId
-                    }
+                    href={`https://${github_endpoint}/apps/health-repository/installations/new/permissions?target_id=${githubProvider.providerAccountId}`}
                   >
                     Autoriser l&apos;application
                   </Link>
@@ -115,11 +117,11 @@ export function ProvidersForm({ user }: AccountFormProps) {
               name="gitlab_endpoint"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>URL</FormLabel>
+                  <FormLabel>Nom de domaine</FormLabel>
                   <FormControl>
                     <Input
                       disabled={isLoading}
-                      placeholder="gitlab.com/{utilisateur}"
+                      placeholder="gitlab.com"
                       {...field}
                     />
                   </FormControl>
@@ -127,6 +129,15 @@ export function ProvidersForm({ user }: AccountFormProps) {
                 </FormItem>
               )}
             />
+            <section className="flex gap-4">
+              <Button variant={"outline"} asChild>
+                <Link
+                  href={`https://${gitlab_endpoint}/oauth/authorize?client_id=${gitlabId}&redirect_uri=${process.env.NEXT_PUBLIC_PUBLIC_URL}/api/auth/providers/gitlab&response_type=code&state=STATE`}
+                >
+                  Generer un access_token
+                </Link>
+              </Button>
+            </section>
           </section>
           <Separator className="my-6" />
         </section>

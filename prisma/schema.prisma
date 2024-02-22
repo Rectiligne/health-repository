@@ -12,22 +12,22 @@ datasource db {
 }
 
 model Account {
-  id                 String  @id @default(cuid())
-  userId             String  @map("user_id")
+  id                 String    @id @default(cuid())
+  userId             String    @map("user_id")
   provider           String
-  type               String? @map("type")
-  providerAccountId  String? @map("provider_account_id")
+  type               String?   @map("type")
+  providerAccountId  String?   @map("provider_account_id")
   refresh_token      String?
   access_token       String?
   endpoint           String?
-  expires_at         Int?
+  expires_at         DateTime?
   token_type         String?
   scope              String?
   id_token           String?
   session_state      String?
   oauth_token_secret String?
   oauth_token        String?
-  user               User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user               User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, provider], name: "user_provider_unique")
 }

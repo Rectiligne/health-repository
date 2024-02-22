@@ -1,19 +1,12 @@
 import { ProvidersForm } from "@/components/form/settings/providers.form";
 import { Separator } from "@/components/ui/separator";
 import { authOptions } from "@/lib/auth";
-import prisma from "@/lib/prisma";
+import { getUser } from "@/lib/user.utils";
 import { getServerSession } from "next-auth";
 
 export default async function Token() {
   const session = await getServerSession(authOptions);
-  const user = await prisma.user.findUnique({
-    where: {
-      email: session!.user.email!,
-    },
-    include: {
-      accounts: true,
-    },
-  });
+  const user = await getUser(session!.user.email!, { accounts: true });
 
   return (
     <main className="space-y-6">
