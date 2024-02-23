@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils";
 
+import clsx from "clsx";
 import { Check, ChevronsUpDown } from "lucide-react";
 import React, { useEffect } from "react";
 import { Button } from "../button";
@@ -14,7 +15,11 @@ import {
 } from "../command";
 import { Popover, PopoverContent, PopoverTrigger } from "../popover";
 
-export default function NavigationHeader() {
+interface NavigationHeaderProps {
+  wideView: boolean;
+}
+
+export default function NavigationHeader({ wideView }: NavigationHeaderProps) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
 
@@ -38,22 +43,36 @@ export default function NavigationHeader() {
             variant="ghost"
             role="combobox"
             aria-expanded={open}
-            className="w-full justify-start gap-4 h-12 items-center pr-3"
+            className={clsx(
+              "gap-4 h-12 items-center pr-3",
+              {
+                "w-full": wideView,
+              },
+              {
+                "w-10 p-0": !wideView,
+              }
+            )}
           >
-            <article className="bg-primary-foreground w-12 h-10 flex items-center justify-center rounded border">
+            <article
+              className={clsx(
+                "bg-primary-foreground w-12 h-10 flex items-center justify-center rounded border"
+              )}
+            >
               {value
                 ? frameworks
                     .find((framework) => framework.value === value)
                     ?.label.slice(0, 2)
                 : "??"}
             </article>
-            <span className="w-full flex gap-2 items-center">
-              {value
-                ? frameworks.find((framework) => framework.value === value)
-                    ?.label
-                : "Select project..."}
-              <ChevronsUpDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
-            </span>
+            {wideView && (
+              <span className={clsx("w-full flex gap-2 items-center")}>
+                {value
+                  ? frameworks.find((framework) => framework.value === value)
+                      ?.label
+                  : "Select project..."}
+                <ChevronsUpDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
+              </span>
+            )}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-full px-3.5 py-0">
