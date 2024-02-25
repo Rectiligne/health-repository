@@ -1,6 +1,7 @@
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { getAccessToken } from "@/lib/providers.utils";
+import { Provider } from "@/types/provider.type";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
@@ -47,7 +48,7 @@ export async function GET(request: Request) {
       },
       create: {
         userId: session!.user.id,
-        type: "github",
+        type: Provider.GIT,
         access_token,
         provider: "github",
         providerAccountId: `${user_data.id}`,

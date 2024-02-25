@@ -15,7 +15,7 @@ export async function submitUserForm(
     params.append(key, data[key]);
   }
 
-  const res = await fetch("/api/user?" + queryParams, {
+  const res = await fetch("/api/users?" + queryParams, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -58,7 +58,7 @@ export async function submitProvidersForm(
 ) {
   callback(true);
 
-  const res = await fetch("/api/account", {
+  const res = await fetch("/api/accounts", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

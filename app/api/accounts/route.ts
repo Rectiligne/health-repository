@@ -2,6 +2,23 @@ import prisma from "@/lib/prisma";
 import { groupByPrefix } from "@/lib/utils";
 import { NextResponse } from "next/server";
 
+export async function GET(request: Request) {
+  try {
+    const body = await request.json();
+    const { where } = body;
+
+    console.log(where);
+
+    const accounts = await prisma.account.findMany({
+      where,
+    });
+
+    return NextResponse.json({ accounts }, { status: 200 });
+  } catch (error: any) {
+    return new NextResponse(error.message, { status: 500 });
+  }
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();

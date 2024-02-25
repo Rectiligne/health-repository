@@ -1,10 +1,11 @@
 import { authOptions } from "@/lib/auth";
+import prisma from "@/lib/prisma";
 import { getAccessToken } from "@/lib/providers.utils";
 import { getUser } from "@/lib/user.utils";
+import { Provider } from "@/types/provider.type";
 import { Account } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
 
 export async function GET(request: Request) {
   try {
@@ -58,7 +59,7 @@ export async function GET(request: Request) {
       },
       create: {
         userId: session!.user.id,
-        type: "gitlab",
+        type: Provider.GIT,
         access_token,
         provider: "gitlab",
         providerAccountId: `${user_data.id}`,

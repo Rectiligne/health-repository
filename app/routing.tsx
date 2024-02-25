@@ -1,37 +1,25 @@
-import { Routes } from '@/types/routes.type';
+import { Routes } from "@/types/routes.type";
 import {
-  ActivityIcon,
-  FlaskConicalIcon,
+  FolderRootIcon,
   LayoutDashboardIcon,
   SettingsIcon,
-  FolderRootIcon
-} from 'lucide-react';
+} from "lucide-react";
 
 export const routes: Routes = [
   {
-    path: '/dashboard',
-    title: 'Dashboard',
-    icon: LayoutDashboardIcon
+    path: "/dashboard",
+    title: "Dashboard",
+    icon: LayoutDashboardIcon,
   },
   {
-    path: '/pipelines',
-    title: 'Pipelines',
-    icon: FlaskConicalIcon
+    path: "/projects",
+    title: "Projects",
+    icon: FolderRootIcon,
   },
   {
-    path: '/repositories',
-    title: 'Repositories',
-    icon: FolderRootIcon
-  },
-  {
-    path: '/environments',
-    title: 'Environments',
-    icon: ActivityIcon
-  },
-  {
-    path: '/settings',
-    title: 'Settings',
+    path: "/settings",
+    title: "Settings",
     icon: SettingsIcon,
-    position: 'bottom'
-  }
+    position: "bottom",
+  },
 ];

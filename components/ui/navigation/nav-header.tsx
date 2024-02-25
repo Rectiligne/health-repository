@@ -1,10 +1,12 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-
+import { cn, firstLetterUppercase } from "@/lib/utils";
+import { useProviderStore } from "@/store/provider.store";
+import { providerIcon } from "@/types/provider.type";
 import clsx from "clsx";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { CheckIcon, ChevronsUpDown } from "lucide-react";
 import React, { useEffect } from "react";
+import { useStore } from "zustand";
 import { Button } from "../button";
 import {
   Command,
@@ -20,20 +22,18 @@ interface NavigationHeaderProps {
 }
 
 export default function NavigationHeader({ wideView }: NavigationHeaderProps) {
+  const currentProvider = useStore(useProviderStore, (state) => state.current);
+  const allProviders = useProviderStore((state) => state.providers);
+  const updateProvider = useProviderStore((state) => state.updateProvider);
+  const fetchAllProviders = useProviderStore(
+    (state) => state.fetchAllProviders
+  );
+
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState("");
 
   useEffect(() => {
-    let value;
-    // Get the value from local storage if it exists
-    value = localStorage.getItem("project") || "";
-    setValue(value);
-  }, []);
-
-  const frameworks = [
-    { label: "Analytics", value: "EA" },
-    { label: "Ophtai", value: "ophtai" },
-  ];
+    fetchAllProviders();
+  }, [fetchAllProviders]);
 
   return (
     <>
@@ -44,9 +44,9 @@ export default function NavigationHeader({ wideView }: NavigationHeaderProps) {
             role="combobox"
             aria-expanded={open}
             className={clsx(
-              "gap-4 h-12 items-center pr-3",
+              "gap-4 h-10 items-center pr-3",
               {
-                "w-full": wideView,
+                "w-full py-0": wideView,
               },
               {
                 "w-10 p-0": !wideView,
@@ -58,18 +58,13 @@ export default function NavigationHeader({ wideView }: NavigationHeaderProps) {
                 "bg-primary-foreground w-12 h-10 flex items-center justify-center rounded border"
               )}
             >
-              {value
-                ? frameworks
-                    .find((framework) => framework.value === value)
-                    ?.label.slice(0, 2)
-                : "??"}
+              {providerIcon[currentProvider?.provider ?? "unknown"]}
             </article>
             {wideView && (
               <span className={clsx("w-full flex gap-2 items-center")}>
-                {value
-                  ? frameworks.find((framework) => framework.value === value)
-                      ?.label
-                  : "Select project..."}
+                {firstLetterUppercase(
+                  currentProvider?.provider ?? "Select provider..."
+                )}
                 <ChevronsUpDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
               </span>
             )}
@@ -78,25 +73,25 @@ export default function NavigationHeader({ wideView }: NavigationHeaderProps) {
         <PopoverContent className="w-full px-3.5 py-0">
           <Command className="w-full">
             <CommandInput className="w-full" placeholder="Search project..." />
-            <CommandEmpty>No framework found.</CommandEmpty>
+            <CommandEmpty>No provider found.</CommandEmpty>
             <CommandGroup>
-              {frameworks.map((framework) => (
+              {allProviders.map((provider) => (
                 <CommandItem
                   className=""
-                  key={framework.value}
-                  value={framework.value}
-                  onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue);
+                  key={provider.provider}
+                  value={firstLetterUppercase(provider.provider)}
+                  onSelect={() => {
+                    updateProvider(provider);
                     setOpen(false);
                   }}
                 >
-                  <Check
+                  <CheckIcon
                     className={cn(
                       "mr-2 h-4 w-4",
-                      value === framework.value ? "opacity-100" : "opacity-0"
+                      currentProvider === provider ? "opacity-100" : "opacity-0"
                     )}
                   />
-                  {framework.label}
+                  {firstLetterUppercase(provider.provider)}
                 </CommandItem>
               ))}
             </CommandGroup>

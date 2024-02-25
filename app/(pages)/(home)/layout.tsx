@@ -1,7 +1,7 @@
 import NavigationChildrenHeader from "@/components/ui/navigation/nav-children-header";
 import NavigationWrapper from "@/components/ui/navigation/nav-wrapper";
 
-export default function layout({
+export default async function layout({
   children,
 }: Readonly<{
   children: React.ReactNode;

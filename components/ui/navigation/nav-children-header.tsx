@@ -10,17 +10,26 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
-import { UserIcon } from "lucide-react";
+import { HomeIcon, UserIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
 import LogOutButton from "../auth/logout.button";
 import { CommandSearch } from "../command-search";
 import { ToggleTheme } from "../toggleTheme";
+import NextBreadcrumb from "./breadcrumb";
 
 export default function NavigationChildrenHeader() {
   const { data: session } = useSession();
 
   return (
     <header className="flex items-center justify-end gap-4">
+      <NextBreadcrumb
+        homeElement={<HomeIcon className="w-4 h-4" />}
+        separator={<span className="mx-2">/</span>}
+        activeClasses="text-primary"
+        containerClasses="flex items-center mr-auto"
+        listClasses="hover:underline mx-2 "
+        capitalizeLinks
+      />
       <article className="command w-56">
         <CommandSearch />
       </article>

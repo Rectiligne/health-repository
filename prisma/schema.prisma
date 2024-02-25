@@ -15,7 +15,7 @@ model Account {
   id                 String    @id @default(cuid())
   userId             String    @map("user_id")
   provider           String
-  type               String?   @map("type")
+  type               String    @map("type")
   providerAccountId  String?   @map("provider_account_id")
   refresh_token      String?
   access_token       String?
