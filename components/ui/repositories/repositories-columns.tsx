@@ -2,17 +2,16 @@
 
 import { GhRepository } from '@/types/github.types';
 import { ColumnDef } from '@tanstack/react-table';
-import { Globe, UserRound } from 'lucide-react';
 import Link from 'next/link';
 import { Badge } from '../badge';
-
-interface RepositoriesDataTableProps {
-  repositories: GhRepository[];
-}
+import { Button } from '../button';
+import { Globe, MoreHorizontalIcon, UserRound } from 'lucide-react';
 
 type pickedColumns = 'id' | 'name' | 'private' | 'html_url' | 'language';
 
-export const columns: ColumnDef<Pick<GhRepository, pickedColumns>>[] = [
+export const columns: ColumnDef<
+  Pick<GhRepository & 'actions', pickedColumns>
+>[] = [
   {
     accessorKey: 'id',
     header: 'ID'
@@ -51,5 +50,18 @@ export const columns: ColumnDef<Pick<GhRepository, pickedColumns>>[] = [
       if (!language) return null;
       return <Badge>{language}</Badge>;
     }
+  },
+  {
+    accessorKey: 'actions',
+    header: 'Actions',
+    cell: () => (
+      // dropdown
+      <Button
+        className="text-transparent group-hover:text-primary"
+        variant="ghost"
+      >
+        <MoreHorizontalIcon />
+      </Button>
+    )
   }
 ];

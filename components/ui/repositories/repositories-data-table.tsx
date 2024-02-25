@@ -1,12 +1,11 @@
 'use client';
 
 import {
-  ColumnDef,
   flexRender,
   getCoreRowModel,
   useReactTable
 } from '@tanstack/react-table';
-
+import { columns } from './repositories-columns';
 import {
   Table,
   TableBody,
@@ -15,18 +14,15 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table';
+import { GhRepository } from '@/types/github.types';
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+interface DataTableProps {
+  repositories: GhRepository[];
 }
 
-export default function RepositoriesDataTable<TData, TValue>({
-  columns,
-  data
-}: DataTableProps<TData, TValue>) {
+export default function RepositoryDataTable({ repositories }: DataTableProps) {
   const table = useReactTable({
-    data,
+    data: repositories,
     columns,
     getCoreRowModel: getCoreRowModel()
   });
@@ -55,6 +51,7 @@ export default function RepositoriesDataTable<TData, TValue>({
         {table.getRowModel().rows?.length ? (
           table.getRowModel().rows.map(row => (
             <TableRow
+              className="group"
               key={row.id}
               data-state={row.getIsSelected() && 'selected'}
             >
